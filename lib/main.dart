@@ -1,15 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'page/page_home.dart';
+import 'page/page_listener.dart';
+import 'page/page_discover.dart';
+import 'page/page_acount.dart';
 
 void main() {
+  print("main入口");
+  IntrinsicWidth()
   runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomeApp());
+    return MaterialApp(home: HomeApp(), debugShowCheckedModeBanner: false,);
   }
 }
 
@@ -18,51 +23,48 @@ class HomeApp extends StatefulWidget {
   _HomeAppState createState() => _HomeAppState();
 }
 
-class _HomeAppState extends State<HomeApp> {
-  final BANNER_IMG = [
-    "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1578827470037&di=b838b38b3938362d0b7b3b6d02e6d3ad&imgtype=0&src=http%3A%2F%2Fs9.rr.itc.cn%2Fr%2FwapChange%2F20173_9_15%2Fa1haev3491717986619.jpeg",
-    "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1579422201&di=f42347e0f335dd0cbae1cf248e9c0c5d&imgtype=jpg&er=1&src=http%3A%2F%2Fimg4.cache.netease.com%2Fent%2F2016%2F5%2F12%2F20160512153345cbb8a.png",
-    "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2356369480,143228265&fm=26&gp=0.jpg",
-    "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=566160464,3173066033&fm=26&gp=0.jpg",
-    "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3237521912,3063271955&fm=26&gp=0.jpg"
-  ];
-
+class _HomeAppState extends State<HomeApp>  {
   final NAV_ITEM = [
-    BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), title: Text("首页")),
+    BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),
     BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.collections), title: Text("我听")),
-    BottomNavigationBarItem(icon: Icon(CupertinoIcons.mail), title: Text("发现")),
+        icon: Icon(Icons.collections), title: Text("我听")),
+    BottomNavigationBarItem(icon: Icon(Icons.mail), title: Text("发现")),
     BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.person), title: Text("账号")),
+        icon: Icon(Icons.person), title: Text("账号")),
   ];
+  final NAV_PAGE = [HomePage(), ListenerPage(), DiscoverPage(), AcountPage()];
+
+  var _index = 0;
+  var currentPage;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    currentPage = NAV_PAGE[_index];
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("喜马拉雅"),
-          backgroundColor: Colors.redAccent,
-        ),
-        body: Container(
-            child: Swiper(
-          itemBuilder: (BuildContext context, int index) {
-            return Image.network(
-              BANNER_IMG[index],
-              fit: BoxFit.fitHeight,
-              height: 300,
-            );
-          },
-          itemCount: BANNER_IMG.length,
-          pagination: SwiperPagination(),
-          control: SwiperControl(),
-        )),
+        body: currentPage,
         bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _index,
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
-          selectedItemColor: Colors.red,
+          selectedItemColor: Colors.redAccent,
           unselectedItemColor: Colors.grey,
           items: NAV_ITEM,
-        ));
+          onTap: (index) {
+            setState(() {
+              _index = index;
+              currentPage = NAV_PAGE[_index];
+            });
+          },
+        )
+    );
   }
 }
 
