@@ -7,7 +7,6 @@ import 'page/page_acount.dart';
 
 void main() {
   print("main入口");
-  IntrinsicWidth()
   runApp(MainApp());
 }
 
